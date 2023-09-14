@@ -1,10 +1,11 @@
 const request = require('request');
 
-var response_result;
+var response_result, expires_in, subdomain;
 
 async function getToken(url, auth_code) {
+    subdomain = url;
     var getTokenReq = {
-        uri: 'https://' + url + '/oauth2/access_token',
+        uri: 'https://' + subdomain + '/oauth2/access_token',
         json: true,
         method: 'POST',
         headers: {
@@ -27,13 +28,19 @@ async function getToken(url, auth_code) {
             }
             response_result = body;
             resolve(response_result);
+            expires_in = response_result.expires_in;
         })
+
     })
 
-    // console.log(response_result);
-    console.log(response_result);
-    return response_result;
+
 };
 
+async function refreshToken() {
+    let currentTime = Math.floor(Date.now() / 1000); // Текущее время в секундах
+    if (expires_in <= currentTime);
+    getToken()
+}
 
-module.exports = { getToken };
+
+module.exports = { getToken, expires_in };
