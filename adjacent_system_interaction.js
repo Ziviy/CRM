@@ -12,7 +12,6 @@ async function createTransaction(name, email, phone) {
 
 async function getContactsNumber(mobileNumber, ) {
     await Token.refreshToken();
-    console.log("ITSME" + state.access_token)
     var getContactsNumber = {
         uri: "https://" + state.subdomain + '/api/v4/contacts?query=' + mobileNumber,
         json: true,
@@ -30,7 +29,8 @@ async function getContactsNumber(mobileNumber, ) {
                 reject(error);
                 return;
             }
-            console.log(body._embedded.contacts);
+            // console.log(body._embedded.contacts);
+            console.log(body);
             resolve(body);
         })
     })

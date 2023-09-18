@@ -26,7 +26,7 @@ async function getToken() {
                 return;
             }
             resolve(body);
-            state.expires_in = body.expires_in;
+            state.expires_in = body.expires_in + Math.floor((Date.now() / 1000 - 60));
             state.access_token = body.access_token;
             state.refresh_token = body.refresh_token;
         })
@@ -37,10 +37,9 @@ async function getToken() {
 };
 
 async function refreshToken() {
-
     let currentTime = Math.floor(Date.now() / 1000); // Текущее время в секундах
     console.log(Date.now() + " " + state.expires_in);
-    if (((state.expires_in - 60) <= currentTime) && (state.expires_in != null)) {
+    if ((state.expires_in <= currentTime) && (state.expires_in != null)) {
         console.log("Обновляю токен");
         var getTokenReq = {
             uri: 'https://' + state.subdomain + '/oauth2/access_token',
@@ -65,7 +64,7 @@ async function refreshToken() {
                     return;
                 }
                 resolve(body);
-                state.expires_in = body.expires_in;
+                state.expires_in = body.expires_in + Math.floor((Date.now() / 1000 - 60));
                 state.access_token = body.access_token;
                 state.refresh_token = body.refresh_token;
             })
